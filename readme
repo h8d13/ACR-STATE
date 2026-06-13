@@ -1,1 +1,6 @@
 # Arch Closed Repository
+
+- All commits require:
+	- A valid `GPG` key
+	- A valid DCO trailer: using `--signoff` or `-s` with `git`
+
