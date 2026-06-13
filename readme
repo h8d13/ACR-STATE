@@ -1,3 +1,4 @@
 # Arch Closed Repository
 
-rulesets are only available to public repos
+- Commits require DCO status check: `--signoff` or `-s` option in `git`
+- Commits require valid `GPG` signature on all commits
