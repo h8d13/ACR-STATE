@@ -1,0 +1,16 @@
+pkgbase = apc-git
+	pkgdesc = Lightweight bash wrapper for Pacman.
+	pkgver = r60.g63dc51d
+	pkgrel = 1
+	url = https://github.com/h8d13/apc
+	arch = any
+	license = 0BSD
+	depends = pacman
+	depends = pacman-contrib
+	depends = reflector
+	provides = apc
+	conflicts = apc
+	source = apc-git::git+https://github.com/h8d13/apc.git
+	sha256sums = SKIP
+
+pkgname = apc-git
