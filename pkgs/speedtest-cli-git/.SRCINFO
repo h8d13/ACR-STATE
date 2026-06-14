@@ -1,0 +1,21 @@
+pkgbase = speedtest-cli-git
+	pkgdesc = CLI for testing internet bandwidth using speedtest.net (py3 fork)
+	pkgver = r315.gb2d73e9
+	pkgrel = 1
+	url = https://github.com/h8d13/speedtest-cli
+	arch = any
+	license = Apache-2.0
+	makedepends = git
+	makedepends = python-build
+	makedepends = python-installer
+	makedepends = python-setuptools
+	makedepends = python-wheel
+	depends = python
+	provides = speedtest-cli
+	provides = speedtest
+	conflicts = speedtest-cli
+	conflicts = speedtest
+	source = speedtest-cli-git::git+https://github.com/h8d13/speedtest-cli.git
+	sha256sums = SKIP
+
+pkgname = speedtest-cli-git
