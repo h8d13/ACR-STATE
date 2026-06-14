@@ -1,0 +1,15 @@
+pkgbase = grimoire-git
+	pkgdesc = Lightweight AUR helper that uses the official AUR git mirror
+	pkgver = r244.g8238afe
+	pkgrel = 1
+	url = https://github.com/mackilanu/grimoire
+	arch = any
+	license = MIT
+	depends = python
+	depends = git
+	provides = grimoire
+	conflicts = grimoire
+	source = grimoire-git::git+https://github.com/h8d13/grimoire.git#branch=dot-cache
+	sha256sums = SKIP
+
+pkgname = grimoire-git
