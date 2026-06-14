@@ -3,6 +3,7 @@
 - All commits require:
 	- A valid `GPG` key to sign all commits + SSH setup (web commits will not be accepted)
 	- A valid DCO trailer: using `--signoff` or `-s` with `git`
+	- Any web commits require an email linked and verified
 	- A valid review from the dictator himself
 
 ## Recipe allowlist
