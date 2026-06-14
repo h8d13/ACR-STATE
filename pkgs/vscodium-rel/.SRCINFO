@@ -1,0 +1,15 @@
+pkgbase = vscodium-rel
+	pkgdesc = VSCodium standalone CLI, installed from the prebuilt release tarball
+	pkgver = 1.121.03429
+	pkgrel = 1
+	url = https://github.com/VSCodium/vscodium
+	arch = x86_64
+	license = MIT
+	provides = codium
+	conflicts = codium
+	options = !strip
+	options = !debug
+	source = vscodium-cli-1.121.03429.tar.gz::https://github.com/VSCodium/vscodium/releases/download/1.121.03429/vscodium-cli-linux-x64-1.121.03429.tar.gz
+	sha256sums = fbb9ed2c328e6dc98d0f2bc7df86da3748de35226c7d3b4cfadbc57742a87f32
+
+pkgname = vscodium-rel

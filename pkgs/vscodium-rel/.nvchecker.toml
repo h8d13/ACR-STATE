@@ -1,0 +1,4 @@
+[vscodium-rel]
+source = "github"
+github = "VSCodium/vscodium"
+use_latest_release = true

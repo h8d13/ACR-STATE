@@ -14,8 +14,12 @@
 
 Every `pkgs/<name>/` recipe must satisfy (enforced by `./check`):
 
-1. **`-git` style only** `pkgname` ends in `-git` and `source=()` uses a
-   `git+` VCS source. No fixed-tarball packages.
+1. **Tracked-upstream source, by suffix.** Every `pkgname` ends in one of:
+   - `-git` — `source=()` is a `git+` VCS source (built from a clone), or
+   - `-rel` — `source=()` is a `releases/download/` URL (a published git tag).
+
+   Both track upstream git; they differ only in whether we build the clone or
+   install a published release artifact. No other suffix is allowed.
 2. **No `.install` scriptlets** no `install=` line and no `*.install` file.
    `*.install` is not on the allowlist, so it cannot even be committed.
 3. **At least one `# Maintainer:` line** in the PKGBUILD.

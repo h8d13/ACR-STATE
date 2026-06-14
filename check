@@ -1,7 +1,10 @@
 #!/bin/bash
 # ACR policy checks. Run from the repo root: ./check
 # Validates every pkgs/<name>/PKGBUILD against the repository rules.
-#   1. only -git style packages (pkgname ends in -git AND has a git+ source)
+#   1. tracked-upstream source, by suffix:
+#        *-git  -> source must be a git+ VCS source
+#        *-rel  -> source must be a releases/download/ URL (a published git tag)
+#      any other pkgname suffix is rejected.
 #   2. no .install pre/post scriptlets (no install= line, no *.install file)
 #   3. at least one '# Maintainer:' line
 set -u
@@ -16,16 +19,26 @@ for pkgbuild in pkgs/*/PKGBUILD; do
 	[[ "$name" == "template" ]] && continue
 	checked=$((checked + 1))
 
-	# Rule 1: -git style package
+	# Rule 1: tracked-upstream source, validated against the pkgname suffix
 	pkgname=$(sed -n "s/^pkgname=//p" "$pkgbuild" | tr -d "'\"" | head -1)
-	if [[ "$pkgname" != *-git ]]; then
-		echo "FAIL [$name]: pkgname '$pkgname' is not -git style"
-		fail=1
-	fi
-	if ! grep -qE '^[[:space:]]*source=.*git\+' "$pkgbuild"; then
-		echo "FAIL [$name]: no git+ VCS source"
-		fail=1
-	fi
+	case "$pkgname" in
+		*-git)
+			if ! grep -qE '^[[:space:]]*source.*=.*git\+' "$pkgbuild"; then
+				echo "FAIL [$name]: -git package has no git+ VCS source"
+				fail=1
+			fi
+			;;
+		*-rel)
+			if ! grep -qE '^[[:space:]]*source.*=.*releases/download/' "$pkgbuild"; then
+				echo "FAIL [$name]: -rel package has no releases/download/ source"
+				fail=1
+			fi
+			;;
+		*)
+			echo "FAIL [$name]: pkgname '$pkgname' must end in -git or -rel"
+			fail=1
+			;;
+	esac
 
 	# Rule 2: no install scriptlets
 	if grep -qE '^[[:space:]]*install=' "$pkgbuild"; then
