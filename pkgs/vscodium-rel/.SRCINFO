@@ -1,15 +1,23 @@
 pkgbase = vscodium-rel
-	pkgdesc = VSCodium standalone CLI, installed from the prebuilt release tarball
+	pkgdesc = VSCodium - Free/Libre OSS build of VS Code (prebuilt release tarball)
 	pkgver = 1.121.03429
 	pkgrel = 1
 	url = https://github.com/VSCodium/vscodium
 	arch = x86_64
 	license = MIT
+	depends = gtk3
+	depends = nss
+	depends = libxss
+	depends = libnotify
+	depends = alsa-lib
 	provides = codium
+	provides = vscodium
 	conflicts = codium
+	conflicts = vscodium
+	noextract = VSCodium-linux-x64-1.121.03429.tar.gz
 	options = !strip
 	options = !debug
-	source = vscodium-cli-1.121.03429.tar.gz::https://github.com/VSCodium/vscodium/releases/download/1.121.03429/vscodium-cli-linux-x64-1.121.03429.tar.gz
-	sha256sums = fbb9ed2c328e6dc98d0f2bc7df86da3748de35226c7d3b4cfadbc57742a87f32
+	source = VSCodium-linux-x64-1.121.03429.tar.gz::https://github.com/VSCodium/vscodium/releases/download/1.121.03429/VSCodium-linux-x64-1.121.03429.tar.gz
+	sha256sums = 2c9b06735d4c1face570935f4968d358f9f6269f5d9237813d0b825c7d70a143
 
 pkgname = vscodium-rel
