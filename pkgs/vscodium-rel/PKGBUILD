@@ -3,18 +3,50 @@
 pkgname=vscodium-rel
 pkgver=1.121.03429
 pkgrel=1
-pkgdesc="VSCodium standalone CLI, installed from the prebuilt release tarball"
+pkgdesc="VSCodium - Free/Libre OSS build of VS Code (prebuilt release tarball)"
 arch=('x86_64')
 _repo="VSCodium/vscodium"
 url="https://github.com/${_repo}"
 
 license=('MIT')
 options=(!strip !debug)
-provides=('codium')
-conflicts=('codium')
-source=("vscodium-cli-${pkgver}.tar.gz::${url}/releases/download/${pkgver}/vscodium-cli-linux-x64-${pkgver}.tar.gz")
-sha256sums=('fbb9ed2c328e6dc98d0f2bc7df86da3748de35226c7d3b4cfadbc57742a87f32')
+depends=('gtk3' 'nss' 'libxss' 'libnotify' 'alsa-lib')
+provides=('codium' 'vscodium')
+conflicts=('codium' 'vscodium')
+_tarball="VSCodium-linux-x64-${pkgver}.tar.gz"
+source=("${_tarball}::${url}/releases/download/${pkgver}/${_tarball}")
+sha256sums=('2c9b06735d4c1face570935f4968d358f9f6269f5d9237813d0b825c7d70a143')
+# The tarball is the full app, extracted flat; keep it intact and unpack it
+# straight into the install dir from package() instead of into $srcdir.
+noextract=("${_tarball}")
 
 package() {
-	install -Dm755 "${srcdir}/codium" "${pkgdir}/usr/bin/codium"
+	# Drop the whole prebuilt app tree under /usr/share/<pkgname>.
+	install -d "${pkgdir}/usr/share/${pkgname}"
+	bsdtar -xf "${srcdir}/${_tarball}" -C "${pkgdir}/usr/share/${pkgname}"
+
+	# Launcher on PATH (the bin/codium wrapper resolves its own app dir).
+	install -d "${pkgdir}/usr/bin"
+	ln -s "/usr/share/${pkgname}/bin/codium" "${pkgdir}/usr/bin/codium"
+
+	# Desktop entry + icon for the application menu.
+	install -Dm644 "${pkgdir}/usr/share/${pkgname}/resources/app/resources/linux/code.png" \
+		"${pkgdir}/usr/share/pixmaps/${pkgname}.png"
+	install -d "${pkgdir}/usr/share/applications"
+	cat > "${pkgdir}/usr/share/applications/${pkgname}.desktop" <<EOF
+[Desktop Entry]
+Name=VSCodium
+Comment=Code editing. Redefined.
+Exec=/usr/bin/codium %F
+Icon=${pkgname}
+Type=Application
+StartupNotify=true
+StartupWMClass=VSCodium
+Categories=TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;
+EOF
+
+	# License
+	install -Dm644 "${pkgdir}/usr/share/${pkgname}/resources/app/LICENSE.txt" \
+		"${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
