@@ -19,9 +19,15 @@ Every `pkgs/<name>/` recipe must satisfy (enforced by `./check`):
    - `-rel` — `source=()` is a `releases/download/` URL (a published git tag).
 
    Both track upstream git; they differ only in whether we build the clone or
-   install a published release artifact. No other suffix is allowed.
-2. **No `.install` scriptlets** no `install=` line and no `*.install` file.
-   `*.install` is not on the allowlist, so it cannot even be committed.
+   install a published release artifact. No other source suffix is allowed.
+   A trailing `-sys` may be appended to either (`-git-sys` / `-rel-sys`) — see
+   rule 2.
+2. **No `.install` scriptlets, unless the package is `-sys`.** By default a
+   recipe may have no `install=` line and no `*.install` file. A package that
+   genuinely needs pre/post scriptlets (systemd units, user creation, cache
+   refresh, …) must opt in by appending `-sys` to its `pkgname`
+   (e.g. `foo-git-sys`). Only `*-sys/` dirs can commit a `*.install` — the
+   allowlist forbids it everywhere else.
 3. **At least one `# Maintainer:` line** in the PKGBUILD.
 
 Run `./check` before committing; CI runs it on every PR.
