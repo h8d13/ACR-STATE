@@ -13,7 +13,11 @@ jobs:
       - name: Validate package rules
         run: bash check
 
+  # Only on PRs: we validate the contributor's own commits. master's squash-merge
+  # commits are created by GitHub without a Signed-off-by trailer, so running this
+  # on push would always fail on the merge commit.
   dco:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,12 +25,6 @@ jobs:
           fetch-depth: 0
       - name: Check DCO sign-off
         env:
-          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-          HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-        run: |
-          # New branch / unknown base -> fall back to comparing against master.
-          if [[ -z "$BASE" || "$BASE" =~ ^0+$ ]]; then
-            git fetch --no-tags origin master
-            BASE=$(git rev-parse origin/master)
-          fi
-          bash dco "$BASE..$HEAD"
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: bash dco "$BASE..$HEAD"
