@@ -51,6 +51,9 @@ Repo-root helper scripts:
 
 - `./check` — validate every recipe against the package rules above. Exits
   non-zero on any violation.
+- `./dco [<range>]` — verify every non-merge commit in `<range>` (default
+  `origin/master..HEAD`) carries a `Signed-off-by:` trailer matching its
+  author. Homebaked DCO check; CI runs it on every push and PR.
 - `./clean` — remove all git-ignored build debris (`pkg/`, `src/`, fetched
   sources, built packages) repo-wide, after a confirmation prompt.
 - `./bump [pkg...]` — refresh packages to the latest upstream state, by tier:
@@ -62,8 +65,9 @@ Packaging you'll want: `nvchecker`, `devtools`, `base-devel` and `pacman-contrib
 
 ## CI
 
-GitHub Actions (`.github/workflows/check.yml`) runs `bash check` on **every
-branch push and every pull request**. A branch that violates any package rule
-fails CI and cannot be merged into `master`.
+GitHub Actions (`.github/workflows/check.yml`) runs two jobs on **every branch
+push and every pull request**: `policy` (`bash check`) and `dco` (`bash dco`).
+A branch that violates any package rule, or carries a commit without a matching
+`Signed-off-by:` trailer, fails CI and cannot be merged into `master`.
 
 ---
